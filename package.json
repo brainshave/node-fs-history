@@ -1,5 +1,5 @@
 {
-  "name": "read-history",
+  "name": "fs-history",
   "version": "0.1.0",
   "scripts": {
     "test": "node test.js"
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/szywon/node-read-history.git"
+    "url": "https://github.com/szywon/node-fs-history.git"
   },
   "bugs": {
     "url": "https://github.com/szywon/ancient-oak/issues"
