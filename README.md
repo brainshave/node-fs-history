@@ -1,13 +1,13 @@
 # FS History
 
-Gives you history of files read by node.
+Gives you history of files opened by NodeJS.
 
 Works by wrapping `open` and `openSync` methods in the fs
-module. Dirty, I know.
+module. Dirty, I know, but sometimes useful.
 
 ## API
 
-The module exposes the `init` function which initialises the
+The module exposes one `init` function which initialises the
 history. Optional argument: list of methods to wrap in the fs
 module. `init` returns the `drain` function.
 
@@ -19,7 +19,9 @@ drains.
 
 ## Usage:
 
+    var history = require("fs-history");
     var fs = require("fs");
+
     var drain = history();
 
     // … read some files here …
