@@ -1,11 +1,12 @@
 {
   "name": "fs-history",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "History of files opened by node",
   "scripts": {
     "test": "node test.js"
   },
-  "author": "Szymon Witamborski <szywon@szywon.pl>",
+  "author": "Szymon Witamborski <simon@brainshave.com>",
+  "license": "MIT",
   "engines": {
     "node": ">= 0.8.0"
   },

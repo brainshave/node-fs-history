@@ -30,4 +30,4 @@ drains.
 
 ## Copying
 
-MIT License.
+MIT License, see [COPYING](COPYING)
