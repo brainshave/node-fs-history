@@ -1,38 +1,50 @@
 "use strict";
 
-module.exports = init;
-
-var fs = require("fs");
-
-var DEFAULT_METHODS = [
+var OPEN_METHODS = [
   "open",
   "openSync"
 ];
 
-function init (methods) {
-  var list = [];
+module.exports = init(require("fs"), OPEN_METHODS);
 
-  (methods || DEFAULT_METHODS).forEach(wrap);
+function wrap (api, methods, callback) {
+  methods.filter(function (name) {
+    return name in api;
+  }).forEach(function (name) {
+    var original = api[name];
+    api[name] = function (path) {
+      callback.apply(api, arguments);
+      return original.apply(api, arguments);
+    }
+  });
+}
 
-  return drain;
+function init (api, methods) {
+  var listeners = [];
 
-  function drain () {
-    var old = list;
-    list = [];
-    return old;
+  wrap(api, methods, count);
+
+  return create_drain;
+
+  function count (path) {
+    listeners.forEach(function (listener) {
+      listener(path);
+    });
   }
 
-  function wrap (name) {
-    var original;
+  function create_drain () {
+    var list = [];
 
-    // wrap only existing
-    if (name in fs) {
-      original = fs[name];
+    listeners.push(function (path) {
+      list.push(path);
+    });
 
-      fs[name] = function (path) {
-        list.push(path);
-        return original.apply(fs, arguments);
-      }
+    return drain;
+
+    function drain () {
+      var old = list;
+      list = [];
+      return old;
     }
   }
 }
