@@ -5,28 +5,35 @@ var history = require("./index");
 
 var drain1 = history();
 
-// Every new drain should be empty
-assert.deepEqual(drain1(), []);
+run().catch((error) => {
+  console.error(error.stack);
+  process.exit(1);
+});
 
-fs.readFileSync("package.json");
+async function run() {
+  // Every new drain should be empty
+  assert.deepEqual(drain1(), []);
 
-// Start the second drain which should be independent from drain1
-var drain2 = history();
-assert.deepEqual(drain2(), []);
+  fs.readFileSync("package.json");
 
-fs.readFileSync("README.md");
+  // Start the second drain which should be independent from drain1
+  var drain2 = history();
+  assert.deepEqual(drain2(), []);
 
-// This should trigger `open` instead of `openSync`
-fs.readFile("index.js");
+  fs.readFileSync("README.md");
 
-// drain1 should have all files we read
-assert.deepEqual(drain1(), ["package.json", "README.md", "index.js"]);
+  // This should trigger `open` instead of `openSync`
+  await new Promise((resolve) => fs.readFile("index.js", () => resolve()));
 
-// drain2 should have only two latter files
-assert.deepEqual(drain2(), ["README.md", "index.js"]);
+  // drain1 should have all files we read
+  assert.deepEqual(drain1(), ["package.json", "README.md", "index.js"]);
 
-// After the drainage they should be empty:
-assert.deepEqual(drain1(), []);
-assert.deepEqual(drain2(), []);
+  // drain2 should have only two latter files
+  assert.deepEqual(drain2(), ["README.md", "index.js"]);
 
-console.log("Done.");
+  // After the drainage they should be empty:
+  assert.deepEqual(drain1(), []);
+  assert.deepEqual(drain2(), []);
+
+  console.log("Done.");
+}

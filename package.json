@@ -1,6 +1,6 @@
 {
   "name": "fs-history",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "History of files opened by node",
   "scripts": {
     "test": "node test.js"
@@ -8,7 +8,7 @@
   "author": "Szymon Witamborski <simon@brainshave.com>",
   "license": "MIT",
   "engines": {
-    "node": ">= 0.8.0"
+    "node": ">= 8"
   },
   "repository": {
     "type": "git",

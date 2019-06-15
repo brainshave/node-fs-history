@@ -2,7 +2,9 @@
 
 var OPEN_METHODS = [
   "open",
-  "openSync"
+  "openSync",
+  "readFile",
+  "readFileSync",
 ];
 
 module.exports = init(require("fs"), OPEN_METHODS);
@@ -33,18 +35,18 @@ function init (api, methods) {
   }
 
   function create_drain () {
-    var list = [];
+    var accessedFiles = new Set();
 
     listeners.push(function (path) {
-      list.push(path);
+      accessedFiles.add(path);
     });
 
     return drain;
 
     function drain () {
-      var old = list;
-      list = [];
-      return old;
+      var previouslyOpened = [...accessedFiles.values()];
+      accessedFiles = new Set();
+      return previouslyOpened;
     }
   }
 }
